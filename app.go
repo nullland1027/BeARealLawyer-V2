@@ -78,7 +78,7 @@ func (a *App) DeleteProject(id string) bool {
 		return false
 	}
 	
-a.repo.Save(newProjects)
+	a.repo.Save(newProjects)
 	return true
 }
 

@@ -1,15 +1,1 @@
-[
-  {
-    "id": "d2c7eea8b14743ef826dab8f925045ab",
-    "name": "A 对 b",
-    "client": "A",
-    "opponent": "b",
-    "lawyer": "x",
-    "stage": "",
-    "status": "等待接手",
-    "notes": "nihao",
-    "files": [],
-    "created_at": "2026-01-31T10:24:34",
-    "updated_at": "2026-01-31T10:33:11"
-  }
-]
+[]

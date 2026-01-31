@@ -129,6 +129,7 @@ function App() {
     // Modal State
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProject, setEditingProject] = useState<main.Project | null>(null);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     // Sensors
     const sensors = useSensors(
@@ -145,6 +146,12 @@ function App() {
     useEffect(() => {
         loadProjects();
     }, []);
+
+    useEffect(() => {
+        if (!isModalOpen) {
+            setShowDeleteConfirm(false);
+        }
+    }, [isModalOpen]);
 
     const loadProjects = async () => {
         try {
@@ -214,26 +221,30 @@ function App() {
         const activeId = active.id as string;
         const overId = over.id as string;
 
-        const currentProject = projects.find(p => p.id === activeId);
-        if (!currentProject) return;
+        // Use activeProject for the original status, as 'projects' might be optimistically updated
+        if (!activeProject) return;
 
-        let newStatus = currentProject.status;
+        let newStatus = activeProject.status;
 
         if (STATUSES.includes(overId)) {
             newStatus = overId;
         } else {
+            // Check if we dropped over another project
+            // We look up the overProject in the current 'projects' list to get its status
             const overProject = projects.find(p => p.id === overId);
             if (overProject) {
                 newStatus = overProject.status;
             }
         }
 
-        if (currentProject.status !== newStatus) {
-            currentProject.status = newStatus;
-            await SaveProject(currentProject);
+        if (activeProject.status !== newStatus) {
+            const updatedProject = new main.Project({ ...activeProject, status: newStatus });
+            // Update timestamp to effectively reorder to top if backend sorts by time? 
+            // Or just save. For now just save.
+            await SaveProject(updatedProject);
         }
 
-        // Handle Reordering within the same list
+        // Handle Reordering within the same list (Visual only for now if backend sorts by time)
         if (activeId !== overId && !STATUSES.includes(overId)) {
              setProjects((items) => {
                 const oldIndex = items.findIndex((p) => p.id === activeId);
@@ -271,11 +282,13 @@ function App() {
 
     const handleDelete = async () => {
         if (editingProject && editingProject.id) {
-            if (confirm(`确定要删除 ${editingProject.name} 吗?`)) {
+            if (showDeleteConfirm) {
                 await DeleteProject(editingProject.id);
                 setIsModalOpen(false);
                 setEditingProject(null);
                 loadProjects();
+            } else {
+                setShowDeleteConfirm(true);
             }
         }
     };
@@ -397,7 +410,13 @@ function App() {
 
                         <div className="modal-buttons">
                             {editingProject.id && (
-                                <button className="delete-btn" onClick={handleDelete}>删除</button>
+                                <button 
+                                    className="delete-btn" 
+                                    onClick={handleDelete}
+                                    style={showDeleteConfirm ? {backgroundColor: '#a71d2a'} : {}}
+                                >
+                                    {showDeleteConfirm ? '确认删除?' : '删除'}
+                                </button>
                             )}
                             <button className="secondary" onClick={() => setIsModalOpen(false)}>取消</button>
                             <button onClick={handleSave}>保存</button>

@@ -218,11 +218,24 @@ label {
 
 /* Modal */
 .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgba(0,0,0,0.6);
   backdrop-filter: blur(2px);
 }
 
 .modal {
+  width: 500px;
+  max-width: 90%;
+  padding: 20px;
+  border-radius: 12px;
   background-color: var(--modal-bg);
   border: 1px solid var(--border-color);
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);

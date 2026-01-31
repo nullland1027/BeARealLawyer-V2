@@ -13,18 +13,10 @@ type Repository struct {
 }
 
 func NewRepository() *Repository {
-	// Try to find the existing data file from the previous Python version
-	// Assuming we are in a subdirectory of the original project
-	path := "../data/projects.json"
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		// Fallback to local data directory
-		path = "data/projects.json"
-	}
+	path := "data/projects.json"
 
-	// Ensure directory exists if we are using the fallback
-	if path == "data/projects.json" {
-		os.MkdirAll("data", 0755)
-	}
+	// Ensure directory exists
+	os.MkdirAll("data", 0755)
 
 	return &Repository{
 		filePath: path,
