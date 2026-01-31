@@ -1,0 +1,13 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "be-a-real-lawyer-v2",
+  "outputfilename": "be-a-real-lawyer-v2",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "zhanghaohan",
+    "email": "nullland1027@outlook.com"
+  }
+}
