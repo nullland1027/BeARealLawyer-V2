@@ -10,6 +10,10 @@ export function GetProjects():Promise<Array<main.Project>>;
 
 export function Greet(arg1:string):Promise<string>;
 
+export function OpenFile(arg1:string):Promise<void>;
+
 export function SaveProject(arg1:main.Project):Promise<main.Project>;
+
+export function SelectFiles():Promise<Array<main.FileLink>>;
 
 export function UpdateProjects(arg1:Array<main.Project>):Promise<boolean>;

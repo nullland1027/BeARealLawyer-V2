@@ -3,8 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"os/exec"
+	"path/filepath"
+	stdruntime "runtime"
 
 	"github.com/google/uuid"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -29,6 +33,42 @@ func (a *App) startup(ctx context.Context) {
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
+}
+
+func (a *App) SelectFiles() []FileLink {
+	selection, err := runtime.OpenMultipleFilesDialog(a.ctx, runtime.OpenDialogOptions{
+		Title: "选择引用文件",
+	})
+
+	if err != nil || len(selection) == 0 {
+		return []FileLink{}
+	}
+
+	var links []FileLink
+	for _, path := range selection {
+		links = append(links, FileLink{
+			Path:      path,
+			Name:      filepath.Base(path),
+			Extension: filepath.Ext(path),
+			IsFolder:  false,
+		})
+	}
+	return links
+}
+
+func (a *App) OpenFile(path string) error {
+	var cmd *exec.Cmd
+
+	switch stdruntime.GOOS {
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "start", "", path)
+	case "darwin":
+		cmd = exec.Command("open", path)
+	default: // linux
+		cmd = exec.Command("xdg-open", path)
+	}
+	
+	return cmd.Start()
 }
 
 func (a *App) GetProjects() []Project {
