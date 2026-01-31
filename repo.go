@@ -5,6 +5,8 @@ import (
 	"os"
 	"sort"
 	"sync"
+
+	"github.com/google/uuid"
 )
 
 type Repository struct {
@@ -42,8 +44,29 @@ func (r *Repository) Load() ([]Project, error) {
 		return []Project{}, nil
 	}
 
-	// Sort by updated_at desc
+	// Deduplicate IDs and ensure they exist
+	seenIDs := make(map[string]bool)
+	dirty := false
+	for i := range projects {
+		if projects[i].ID == "" || seenIDs[projects[i].ID] {
+			projects[i].ID = uuid.New().String()
+			dirty = true
+		}
+		seenIDs[projects[i].ID] = true
+	}
+
+	// If we fixed any IDs, save the corrected data back to disk immediately
+	// using a direct internal save (ignoring the mutex since we hold it)
+	if dirty {
+		saveData, _ := json.MarshalIndent(projects, "", "  ")
+		os.WriteFile(r.filePath, saveData, 0644)
+	}
+
+	// Sort by SortOrder asc, then updated_at desc
 	sort.Slice(projects, func(i, j int) bool {
+		if projects[i].SortOrder != projects[j].SortOrder {
+			return projects[i].SortOrder < projects[j].SortOrder
+		}
 		return projects[i].UpdatedAt > projects[j].UpdatedAt
 	})
 

@@ -21,3 +21,7 @@ export function Greet(arg1) {
 export function SaveProject(arg1) {
   return window['go']['main']['App']['SaveProject'](arg1);
 }
+
+export function UpdateProjects(arg1) {
+  return window['go']['main']['App']['UpdateProjects'](arg1);
+}

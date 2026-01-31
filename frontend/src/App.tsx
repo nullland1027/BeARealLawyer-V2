@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import './App.css';
-import { GetProjects, SaveProject, DeleteProject } from '../wailsjs/go/main/App';
+import { GetProjects, SaveProject, DeleteProject, UpdateProjects } from '../wailsjs/go/main/App';
 import { main } from '../wailsjs/go/models';
 import {
     DndContext, 
@@ -26,7 +26,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-const STATUSES = ["等待接手", "正在处理", "已结案"];
+const STATUSES = ["等待接手", "正在处理", "已交付", "已结案"];
 
 // --- Components ---
 
@@ -87,6 +87,7 @@ function Sidebar({ projects }: { projects: main.Project[] }) {
             total: projects.length,
             waiting: projects.filter(p => p.status === "等待接手").length,
             processing: projects.filter(p => p.status === "正在处理").length,
+            delivered: projects.filter(p => p.status === "已交付").length,
             closed: projects.filter(p => p.status === "已结案").length,
         };
     }, [projects]);
@@ -110,6 +111,10 @@ function Sidebar({ projects }: { projects: main.Project[] }) {
                 <div className="metric-card">
                     <div className="metric-number" style={{color: '#17a2b8'}}>{metrics.processing}</div>
                     <div className="metric-label">正在处理</div>
+                </div>
+                <div className="metric-card">
+                    <div className="metric-number" style={{color: '#6610f2'}}>{metrics.delivered}</div>
+                    <div className="metric-label">已交付</div>
                 </div>
                 <div className="metric-card">
                     <div className="metric-number" style={{color: '#28a745'}}>{metrics.closed}</div>
@@ -221,40 +226,45 @@ function App() {
         const activeId = active.id as string;
         const overId = over.id as string;
 
-        // Use activeProject for the original status, as 'projects' might be optimistically updated
-        if (!activeProject) return;
+        let currentProjects = [...projects];
+        const activeIndex = currentProjects.findIndex(p => p.id === activeId);
+        if (activeIndex === -1) return;
 
-        let newStatus = activeProject.status;
-
+        // Determine new status
+        let newStatus = currentProjects[activeIndex].status;
         if (STATUSES.includes(overId)) {
             newStatus = overId;
         } else {
-            // Check if we dropped over another project
-            // We look up the overProject in the current 'projects' list to get its status
-            const overProject = projects.find(p => p.id === overId);
+            const overProject = currentProjects.find(p => p.id === overId);
             if (overProject) {
                 newStatus = overProject.status;
             }
         }
 
-        if (activeProject.status !== newStatus) {
-            const updatedProject = new main.Project({ ...activeProject, status: newStatus });
-            // Update timestamp to effectively reorder to top if backend sorts by time? 
-            // Or just save. For now just save.
-            await SaveProject(updatedProject);
-        }
-
-        // Handle Reordering within the same list (Visual only for now if backend sorts by time)
-        if (activeId !== overId && !STATUSES.includes(overId)) {
-             setProjects((items) => {
-                const oldIndex = items.findIndex((p) => p.id === activeId);
-                const newIndex = items.findIndex((p) => p.id === overId);
-                return arrayMove(items, oldIndex, newIndex);
+        // Update status locally
+        if (currentProjects[activeIndex].status !== newStatus) {
+            currentProjects[activeIndex] = new main.Project({
+                ...currentProjects[activeIndex],
+                status: newStatus
             });
         }
-        
-        // Reload to sync with backend order
-        loadProjects();
+
+        // Handle Reordering
+        if (activeId !== overId && !STATUSES.includes(overId)) {
+             const overIndex = currentProjects.findIndex(p => p.id === overId);
+             if (overIndex !== -1) {
+                 currentProjects = arrayMove(currentProjects, activeIndex, overIndex);
+             }
+        }
+
+        // Update sort_order based on the new linear order
+        currentProjects.forEach((p, index) => {
+            p.sort_order = index;
+        });
+
+        // Update State & Backend
+        setProjects(currentProjects);
+        await UpdateProjects(currentProjects);
     };
 
     // --- CRUD ---

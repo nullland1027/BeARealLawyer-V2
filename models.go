@@ -19,6 +19,7 @@ type Project struct {
 	Lawyer    string     `json:"lawyer"`
 	Stage     string     `json:"stage"`
 	Status    string     `json:"status"`
+	SortOrder int        `json:"sort_order"`
 	Notes     string     `json:"notes"`
 	Files     []FileLink `json:"files"`
 	CreatedAt string     `json:"created_at"`

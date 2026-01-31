@@ -26,6 +26,7 @@ export namespace main {
 	    lawyer: string;
 	    stage: string;
 	    status: string;
+	    sort_order: number;
 	    notes: string;
 	    files: FileLink[];
 	    created_at: string;
@@ -44,6 +45,7 @@ export namespace main {
 	        this.lawyer = source["lawyer"];
 	        this.stage = source["stage"];
 	        this.status = source["status"];
+	        this.sort_order = source["sort_order"];
 	        this.notes = source["notes"];
 	        this.files = this.convertValues(source["files"], FileLink);
 	        this.created_at = source["created_at"];

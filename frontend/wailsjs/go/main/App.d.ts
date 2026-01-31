@@ -11,3 +11,5 @@ export function GetProjects():Promise<Array<main.Project>>;
 export function Greet(arg1:string):Promise<string>;
 
 export function SaveProject(arg1:main.Project):Promise<main.Project>;
+
+export function UpdateProjects(arg1:Array<main.Project>):Promise<boolean>;

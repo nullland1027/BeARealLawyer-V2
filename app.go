@@ -88,3 +88,8 @@ func (a *App) DeleteAllProjects() int {
 	a.repo.Save([]Project{})
 	return count
 }
+
+func (a *App) UpdateProjects(projects []Project) bool {
+	err := a.repo.Save(projects)
+	return err == nil
+}
