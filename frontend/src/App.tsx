@@ -136,6 +136,11 @@ function App() {
     const [editingProject, setEditingProject] = useState<main.Project | null>(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+    // Sidebar State
+    const [sidebarWidth, setSidebarWidth] = useState(250);
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isResizing, setIsResizing] = useState(false);
+
     // Sensors
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -157,6 +162,44 @@ function App() {
             setShowDeleteConfirm(false);
         }
     }, [isModalOpen]);
+
+    // Sidebar Resizing Logic
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isResizing) return;
+            // Limit min/max width
+            const newWidth = Math.max(150, Math.min(e.clientX, 600));
+            setSidebarWidth(newWidth);
+        };
+
+        const handleMouseUp = () => {
+            if (isResizing) {
+                setIsResizing(false);
+                document.body.style.cursor = 'default';
+                document.body.style.userSelect = 'auto';
+            }
+        };
+
+        if (isResizing) {
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none'; // Prevent text selection
+        }
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isResizing]);
+
+    const startResizing = () => {
+        setIsResizing(true);
+    };
+
+    const toggleCollapse = () => {
+        setIsCollapsed(!isCollapsed);
+    };
 
     const loadProjects = async () => {
         try {
@@ -315,7 +358,25 @@ function App() {
 
     return (
         <div className="app-container">
-            <Sidebar projects={projects} />
+            <div 
+                className="sidebar-wrapper" 
+                style={{ 
+                    width: isCollapsed ? 0 : sidebarWidth,
+                    overflow: 'hidden',
+                    transition: isResizing ? 'none' : 'width 0.3s ease'
+                }}
+            >
+                <Sidebar projects={projects} />
+            </div>
+            
+            <div 
+                className={`resize-handle ${isResizing ? 'active' : ''}`}
+                onMouseDown={startResizing}
+            >
+                <button className="collapse-btn" onClick={(e) => { e.stopPropagation(); toggleCollapse(); }}>
+                    {isCollapsed ? '❯' : '❮'}
+                </button>
+            </div>
             
             <div className="main-content">
                 <div className="toolbar">
