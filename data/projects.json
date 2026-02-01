@@ -1,1 +1,82 @@
-[]
+[
+  {
+    "id": "5b450577-6921-4969-af5b-ba9c384c3d60",
+    "name": "银行抢劫案",
+    "client": "B",
+    "opponent": "B",
+    "lawyer": "B",
+    "stage": "",
+    "status": "已结案",
+    "sort_order": 0,
+    "notes": "",
+    "files": [
+      {
+        "path": "/Users/zhanghaohan/Downloads/111.png",
+        "name": "111.png",
+        "extension": ".png",
+        "is_folder": false
+      },
+      {
+        "path": "/Users/zhanghaohan/Downloads/final_output_neg.csv",
+        "name": "final_output_neg.csv",
+        "extension": ".csv",
+        "is_folder": false
+      },
+      {
+        "path": "/Users/zhanghaohan/Downloads/workingplace/video.mp4",
+        "name": "video.mp4",
+        "extension": ".mp4",
+        "is_folder": false
+      }
+    ],
+    "created_at": "2026-01-31T22:11:19+08:00",
+    "updated_at": "2026-01-31T22:53:23+08:00"
+  },
+  {
+    "id": "84beda98-1628-43e3-8e1e-76576ecec0e8",
+    "name": "",
+    "client": "A",
+    "opponent": "A",
+    "lawyer": "A",
+    "stage": "",
+    "status": "正在处理",
+    "sort_order": 1,
+    "notes": "",
+    "files": null,
+    "created_at": "2026-01-31T22:11:00+08:00",
+    "updated_at": "2026-01-31T22:11:11+08:00"
+  },
+  {
+    "id": "b20e9e7d-f108-4074-87ad-288d16775b51",
+    "name": "哈哈哥当主席",
+    "client": "A",
+    "opponent": "A",
+    "lawyer": "A",
+    "stage": "",
+    "status": "已交付",
+    "sort_order": 2,
+    "notes": "",
+    "files": [
+      {
+        "path": "/Users/zhanghaohan/Downloads/workingplace",
+        "name": "workingplace",
+        "extension": "",
+        "is_folder": true
+      },
+      {
+        "path": "/Users/zhanghaohan/Downloads/ave_next_ssv",
+        "name": "ave_next_ssv",
+        "extension": "",
+        "is_folder": true
+      },
+      {
+        "path": "/Users/zhanghaohan/Downloads/《AI图景解码50个年度关键词》腾讯研究院2025.pdf",
+        "name": "《AI图景解码50个年度关键词》腾讯研究院2025.pdf",
+        "extension": ".pdf",
+        "is_folder": false
+      }
+    ],
+    "created_at": "2026-01-31T22:02:30+08:00",
+    "updated_at": "2026-01-31T23:05:16+08:00"
+  }
+]

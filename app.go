@@ -56,6 +56,23 @@ func (a *App) SelectFiles() []FileLink {
 	return links
 }
 
+func (a *App) SelectFolder() []FileLink {
+	selection, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+		Title: "选择引用文件夹",
+	})
+
+	if err != nil || selection == "" {
+		return []FileLink{}
+	}
+
+	return []FileLink{{
+		Path:      selection,
+		Name:      filepath.Base(selection),
+		Extension: "",
+		IsFolder:  true,
+	}}
+}
+
 func (a *App) OpenFile(path string) error {
 	var cmd *exec.Cmd
 

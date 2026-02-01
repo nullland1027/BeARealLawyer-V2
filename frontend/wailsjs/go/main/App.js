@@ -30,6 +30,10 @@ export function SelectFiles() {
   return window['go']['main']['App']['SelectFiles']();
 }
 
+export function SelectFolder() {
+  return window['go']['main']['App']['SelectFolder']();
+}
+
 export function UpdateProjects(arg1) {
   return window['go']['main']['App']['UpdateProjects'](arg1);
 }

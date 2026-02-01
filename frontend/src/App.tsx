@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import './App.css';
-import { GetProjects, SaveProject, DeleteProject, UpdateProjects, SelectFiles, OpenFile } from '../wailsjs/go/main/App';
+import { GetProjects, SaveProject, DeleteProject, UpdateProjects, SelectFiles, SelectFolder, OpenFile } from '../wailsjs/go/main/App';
 import { main } from '../wailsjs/go/models';
 import {
     DndContext, 
@@ -362,6 +362,22 @@ function App() {
         }
     };
 
+    const handleAddFolder = async () => {
+        if (!editingProject) return;
+        try {
+            const newFolder = await SelectFolder();
+            if (newFolder && newFolder.length > 0) {
+                const currentFiles = editingProject.files || [];
+                setEditingProject(new main.Project({
+                    ...editingProject,
+                    files: [...currentFiles, ...newFolder]
+                }));
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleOpenFile = async (path: string) => {
         try {
             await OpenFile(path);
@@ -519,7 +535,7 @@ function App() {
                                 editingProject.files.map((file, index) => (
                                     <div key={index} className="file-item">
                                         <span onClick={() => handleOpenFile(file.path)} className="file-name" title={file.path}>
-                                            📄 {file.name}
+                                            {file.is_folder ? '📂' : '📄'} {file.name}
                                         </span>
                                         <span className="file-remove" onClick={() => handleRemoveFile(index)}>✕</span>
                                     </div>
@@ -527,7 +543,8 @@ function App() {
                             ) : (
                                 <div style={{padding: '10px', color: '#999', fontSize: '0.9em', textAlign: 'center'}}>无引用文件</div>
                             )}
-                            <div style={{textAlign: 'right'}}>
+                            <div style={{textAlign: 'right', display: 'flex', justifyContent: 'flex-end', gap: '10px'}}>
+                                <button className="secondary small-btn" onClick={handleAddFolder}>+ 添加文件夹</button>
                                 <button className="secondary small-btn" onClick={handleAddFiles}>+ 添加文件</button>
                             </div>
                         </div>
