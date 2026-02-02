@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "id": "1c9bb7d7-60eb-4f24-90f8-b0fb13a2d980",
+    "name": "20251206苏州回宁波路上",
+    "client": "A",
+    "opponent": "B",
+    "lawyer": "D",
+    "stage": "",
+    "status": "已结案",
+    "sort_order": 0,
+    "notes": "",
+    "files": [
+      {
+        "path": "/Users/zhanghaohan/Movies/osmo360/20251206苏州回宁波路上",
+        "name": "20251206苏州回宁波路上",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-02-02T21:18:02+08:00",
+    "updated_at": "2026-02-02T21:18:02+08:00"
+  }
+]

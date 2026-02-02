@@ -358,7 +358,7 @@ label {
   text-align: center;
   color: #666;
   background-color: rgba(0, 0, 0, 0.02);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: default;
   display: flex;
   flex-direction: column;
@@ -367,10 +367,70 @@ label {
   --wails-drop-target: drop;
 }
 
+.drop-zone-icon {
+  font-size: 2em;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+.drop-zone-text {
+  font-size: 1em;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.drop-zone-subtext {
+  font-size: 0.8em;
+  opacity: 0.7;
+  margin-top: 5px;
+  transition: all 0.3s ease;
+}
+
 .drop-zone-hint:hover {
   border-color: #007bff;
   color: #007bff;
   background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Drag Over Active State */
+.drop-zone-hint.drag-over {
+  border-color: #28a745;
+  border-style: solid;
+  border-width: 3px;
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.15) 0%, rgba(40, 167, 69, 0.08) 100%);
+  color: #28a745;
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.25), 
+              inset 0 0 20px rgba(40, 167, 69, 0.1);
+}
+
+.drop-zone-hint.drag-over .drop-zone-text {
+  font-weight: 600;
+  transform: scale(1.05);
+}
+
+.drop-zone-hint.drag-over .drop-zone-subtext {
+  opacity: 1;
+}
+
+/* Bounce Animation for Icon */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-4px);
+  }
+}
+
+.drop-zone-icon.bounce {
+  animation: bounce 0.6s ease-in-out infinite;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -383,5 +443,12 @@ label {
     border-color: #007bff;
     color: #007bff;
     background-color: rgba(0, 123, 255, 0.1);
+  }
+  .drop-zone-hint.drag-over {
+    border-color: #28a745;
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.2) 0%, rgba(40, 167, 69, 0.1) 100%);
+    color: #28a745;
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3), 
+                inset 0 0 20px rgba(40, 167, 69, 0.15);
   }
 }

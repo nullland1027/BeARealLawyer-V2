@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import './App.css';
 import { GetProjects, SaveProject, DeleteProject, UpdateProjects, SelectFiles, SelectFolder, OpenFile, CheckPath } from '../wailsjs/go/main/App';
 import { main } from '../wailsjs/go/models';
-import { OnFileDrop, OnFileDropOff, LogInfo } from '../wailsjs/runtime/runtime';
+import { OnFileDrop, OnFileDropOff, LogInfo, Show } from '../wailsjs/runtime/runtime';
 import {
     DndContext, 
     closestCorners,
@@ -82,7 +82,7 @@ function DroppableColumn({ id, title, projects, onEdit }: { id: string, title: s
     );
 }
 
-function Sidebar({ projects }: { projects: main.Project[] }) {
+function Sidebar({ projects, isDragOver }: { projects: main.Project[], isDragOver: boolean }) {
     const metrics = useMemo(() => {
         return {
             total: projects.length,
@@ -124,15 +124,16 @@ function Sidebar({ projects }: { projects: main.Project[] }) {
             </div>
 
             <div 
-                className="drop-zone-hint"
+                className={`drop-zone-hint ${isDragOver ? 'drag-over' : ''}`}
             >
-                <div style={{fontSize: '2em', marginBottom: '10px'}}>📂</div>
-                <div>拖动文件夹到此处</div>
-                <div style={{fontSize: '0.8em', opacity: 0.7, marginTop: '5px'}}>快速创建新项目</div>
+                <div className={`drop-zone-icon ${isDragOver ? 'bounce' : ''}`}>📂</div>
+                <div className="drop-zone-text">{isDragOver ? '松开以创建项目' : '拖动文件夹到此处'}</div>
+                <div className="drop-zone-subtext">{isDragOver ? '将使用文件夹名作为项目名称' : '快速创建新项目'}</div>
             </div>
         </div>
     );
 }
+
 
 // --- Main App Component ---
 function App() {
@@ -150,6 +151,9 @@ function App() {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
 
+    // Drag and Drop Visual State
+    const [isDragOverDropZone, setIsDragOverDropZone] = useState(false);
+
     // Sensors
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -163,28 +167,72 @@ function App() {
     );
 
     useEffect(() => {
-        // Prevent default behavior for dragover/drop to allow dropping
+        // Track if we're in a drag session to avoid calling Show() multiple times
+        let isDragging = false;
+        let lastOverDropZone = false;
+
+        // Use dragover to continuously check position - more reliable than dragenter/dragleave
         const handleDragOver = (e: DragEvent) => {
             e.preventDefault();
             if (e.dataTransfer) {
                 e.dataTransfer.dropEffect = 'copy';
             }
-            console.log("Native DragOver");
+            
+            // Activate window on first drag over (only once per drag session)
+            if (!isDragging) {
+                isDragging = true;
+                Show();
+            }
+            
+            // Check if we're over the drop zone
+            const target = e.target as HTMLElement;
+            const isOverDropZone = !!target.closest('.drop-zone-hint');
+            
+            // Only update state if it changed (for performance)
+            if (isOverDropZone !== lastOverDropZone) {
+                lastOverDropZone = isOverDropZone;
+                setIsDragOverDropZone(isOverDropZone);
+            }
         };
         
         const handleDrop = (e: DragEvent) => {
             e.preventDefault();
-            console.log("Native Drop", e.dataTransfer);
+            isDragging = false;
+            lastOverDropZone = false;
+            setIsDragOverDropZone(false);
+        };
+
+        // Handle drag end (when drag is cancelled or leaves window)
+        const handleDragEnd = () => {
+            isDragging = false;
+            lastOverDropZone = false;
+            setIsDragOverDropZone(false);
+        };
+
+        // Handle drag leave window entirely
+        const handleDragLeave = (e: DragEvent) => {
+            e.preventDefault();
+            const relatedTarget = e.relatedTarget as HTMLElement;
+            
+            // Reset when leaving the window entirely
+            if (!relatedTarget || !document.body.contains(relatedTarget)) {
+                isDragging = false;
+                lastOverDropZone = false;
+                setIsDragOverDropZone(false);
+            }
         };
 
         window.addEventListener('dragover', handleDragOver);
         window.addEventListener('drop', handleDrop);
+        window.addEventListener('dragend', handleDragEnd);
+        window.addEventListener('dragleave', handleDragLeave);
 
         loadProjects();
 
         OnFileDrop(async (x, y, paths) => {
             LogInfo("Frontend OnFileDrop triggered with: " + JSON.stringify(paths));
             console.log("File dropped:", paths);
+            setIsDragOverDropZone(false);
             if (paths && paths.length > 0) {
                 const path = paths[0];
                 try {
@@ -206,6 +254,8 @@ function App() {
         return () => {
             window.removeEventListener('dragover', handleDragOver);
             window.removeEventListener('drop', handleDrop);
+            window.removeEventListener('dragend', handleDragEnd);
+            window.removeEventListener('dragleave', handleDragLeave);
             OnFileDropOff();
         };
     }, []);
@@ -469,7 +519,7 @@ function App() {
                     transition: isResizing ? 'none' : 'width 0.3s ease'
                 }}
             >
-                <Sidebar projects={projects} />
+                <Sidebar projects={projects} isDragOver={isDragOverDropZone} />
             </div>
             
             <div 
