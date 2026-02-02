@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"os/exec"
 	"path/filepath"
 	stdruntime "runtime"
@@ -147,6 +148,41 @@ func (a *App) DeleteAllProjects() int {
 }
 
 func (a *App) UpdateProjects(projects []Project) bool {
+
 	err := a.repo.Save(projects)
+
 	return err == nil
+
+}
+
+
+
+func (a *App) CheckPath(path string) FileLink {
+
+
+
+	fmt.Printf("Backend CheckPath called with: %s\n", path)
+
+
+
+	info, err := os.Stat(path)
+
+	if err != nil {
+
+		return FileLink{}
+
+	}
+
+	return FileLink{
+
+		Path:      path,
+
+		Name:      info.Name(),
+
+		Extension: filepath.Ext(path),
+
+		IsFolder:  info.IsDir(),
+
+	}
+
 }

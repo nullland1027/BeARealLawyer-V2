@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import './App.css';
-import { GetProjects, SaveProject, DeleteProject, UpdateProjects, SelectFiles, SelectFolder, OpenFile } from '../wailsjs/go/main/App';
+import { GetProjects, SaveProject, DeleteProject, UpdateProjects, SelectFiles, SelectFolder, OpenFile, CheckPath } from '../wailsjs/go/main/App';
 import { main } from '../wailsjs/go/models';
+import { OnFileDrop, OnFileDropOff, LogInfo } from '../wailsjs/runtime/runtime';
 import {
     DndContext, 
     closestCorners,
@@ -121,6 +122,14 @@ function Sidebar({ projects }: { projects: main.Project[] }) {
                     <div className="metric-label">已结案</div>
                 </div>
             </div>
+
+            <div 
+                className="drop-zone-hint"
+            >
+                <div style={{fontSize: '2em', marginBottom: '10px'}}>📂</div>
+                <div>拖动文件夹到此处</div>
+                <div style={{fontSize: '0.8em', opacity: 0.7, marginTop: '5px'}}>快速创建新项目</div>
+            </div>
         </div>
     );
 }
@@ -154,7 +163,51 @@ function App() {
     );
 
     useEffect(() => {
+        // Prevent default behavior for dragover/drop to allow dropping
+        const handleDragOver = (e: DragEvent) => {
+            e.preventDefault();
+            if (e.dataTransfer) {
+                e.dataTransfer.dropEffect = 'copy';
+            }
+            console.log("Native DragOver");
+        };
+        
+        const handleDrop = (e: DragEvent) => {
+            e.preventDefault();
+            console.log("Native Drop", e.dataTransfer);
+        };
+
+        window.addEventListener('dragover', handleDragOver);
+        window.addEventListener('drop', handleDrop);
+
         loadProjects();
+
+        OnFileDrop(async (x, y, paths) => {
+            LogInfo("Frontend OnFileDrop triggered with: " + JSON.stringify(paths));
+            console.log("File dropped:", paths);
+            if (paths && paths.length > 0) {
+                const path = paths[0];
+                try {
+                    const info = await CheckPath(path);
+                    const newProject = new main.Project();
+                    newProject.status = "等待接手";
+                    newProject.name = info.name;
+                    newProject.files = [info];
+                    
+                    setEditingProject(newProject);
+                    setIsModalOpen(true);
+                } catch (e) {
+                    console.error("Failed to check path:", e);
+                    LogInfo("Frontend CheckPath error: " + e);
+                }
+            }
+        }, true);
+
+        return () => {
+            window.removeEventListener('dragover', handleDragOver);
+            window.removeEventListener('drop', handleDrop);
+            OnFileDropOff();
+        };
     }, []);
 
     useEffect(() => {
