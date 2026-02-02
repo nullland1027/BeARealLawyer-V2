@@ -75,6 +75,11 @@ func (a *App) SelectFolder() []FileLink {
 }
 
 func (a *App) OpenFile(path string) error {
+	// Check if file/folder exists first
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return fmt.Errorf("文件或文件夹不存在: %s", filepath.Base(path))
+	}
+
 	var cmd *exec.Cmd
 
 	switch stdruntime.GOOS {

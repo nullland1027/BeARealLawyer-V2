@@ -154,6 +154,10 @@ function App() {
     // Drag and Drop Visual State
     const [isDragOverDropZone, setIsDragOverDropZone] = useState(false);
 
+    // Toast Message State
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [toastType, setToastType] = useState<'error' | 'success'>('error');
+
     // Sensors
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -265,6 +269,22 @@ function App() {
             setShowDeleteConfirm(false);
         }
     }, [isModalOpen]);
+
+    // Auto-hide toast after 3 seconds
+    useEffect(() => {
+        if (toastMessage) {
+            const timer = setTimeout(() => {
+                setToastMessage(null);
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [toastMessage]);
+
+    // Helper function to show toast
+    const showToast = (message: string, type: 'error' | 'success' = 'error') => {
+        setToastMessage(message);
+        setToastType(type);
+    };
 
     // Sidebar Resizing Logic
     useEffect(() => {
@@ -484,8 +504,11 @@ function App() {
     const handleOpenFile = async (path: string) => {
         try {
             await OpenFile(path);
-        } catch (err) {
+        } catch (err: any) {
             console.error("Failed to open file:", err);
+            // Show user-friendly error message
+            const message = err?.message || err?.toString() || "无法打开文件";
+            showToast(message, 'error');
         }
     };
 
@@ -666,6 +689,15 @@ function App() {
                             <button onClick={handleSave}>保存</button>
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* Toast Notification */}
+            {toastMessage && (
+                <div className={`toast toast-${toastType}`}>
+                    <span className="toast-icon">{toastType === 'error' ? '⚠️' : '✅'}</span>
+                    <span className="toast-message">{toastMessage}</span>
+                    <button className="toast-close" onClick={() => setToastMessage(null)}>✕</button>
                 </div>
             )}
         </div>
