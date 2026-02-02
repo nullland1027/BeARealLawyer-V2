@@ -5,9 +5,10 @@ import './Sidebar.css';
 interface SidebarProps {
     projects: models.Project[];
     isDragOver: boolean;
+    onOpenSettings: () => void;
 }
 
-export function Sidebar({ projects, isDragOver }: SidebarProps) {
+export function Sidebar({ projects, isDragOver, onOpenSettings }: SidebarProps) {
     const metrics = useMemo(() => {
         return {
             total: projects.length,
@@ -57,6 +58,15 @@ export function Sidebar({ projects, isDragOver }: SidebarProps) {
                     {isDragOver ? '将使用文件夹名作为项目名称' : '快速创建新项目'}
                 </div>
             </div>
+
+            {/* Spacer to push settings button to bottom */}
+            <div className="sidebar-spacer" />
+
+            {/* Settings Button */}
+            <button className="settings-button" onClick={onOpenSettings}>
+                <span className="settings-icon">⚙️</span>
+                <span className="settings-text">设置</span>
+            </button>
         </div>
     );
 }

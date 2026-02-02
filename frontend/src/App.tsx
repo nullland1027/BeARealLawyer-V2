@@ -7,9 +7,10 @@ import { Sidebar } from './components/Sidebar';
 import { Board } from './components/Board';
 import { ProjectModal } from './components/Modal';
 import { Toast } from './components/Toast';
+import { SettingsModal } from './components/Settings';
 
 // Hooks
-import { useToast, useProjects, useFileDrop } from './hooks';
+import { useToast, useProjects, useFileDrop, useTheme } from './hooks';
 
 // DnD Kit
 import {
@@ -36,6 +37,7 @@ function App() {
     const { toastMessage, toastType, showToast, hideToast } = useToast();
     const { projects, loadProjects, saveProject, deleteProject, updateProjects, setProjects } = useProjects();
     const { isDragOverDropZone, droppedProject, clearDroppedProject } = useFileDrop();
+    const { theme, setTheme } = useTheme();
 
     // DnD State
     const [activeId, setActiveId] = useState<string | null>(null);
@@ -44,6 +46,9 @@ function App() {
     // Modal State
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProject, setEditingProject] = useState<models.Project | null>(null);
+
+    // Settings State
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     // Sidebar State
     const [sidebarWidth, setSidebarWidth] = useState(250);
@@ -231,7 +236,11 @@ function App() {
                     transition: isResizing ? 'none' : 'width 0.3s ease'
                 }}
             >
-                <Sidebar projects={projects} isDragOver={isDragOverDropZone} />
+                <Sidebar 
+                    projects={projects} 
+                    isDragOver={isDragOverDropZone} 
+                    onOpenSettings={() => setIsSettingsOpen(true)}
+                />
             </div>
             
             <div 
@@ -282,6 +291,13 @@ function App() {
                     showToast={showToast}
                 />
             )}
+
+            <SettingsModal
+                isOpen={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
+                theme={theme}
+                onThemeChange={setTheme}
+            />
 
             <Toast 
                 message={toastMessage} 

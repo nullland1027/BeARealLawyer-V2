@@ -156,3 +156,40 @@
                 inset 0 0 20px rgba(40, 167, 69, 0.15);
   }
 }
+
+/* Sidebar Spacer */
+.sidebar-spacer {
+  flex: 1;
+}
+
+/* Settings Button */
+.settings-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.settings-button:hover {
+  background-color: var(--card-hover);
+  border-color: #007bff;
+  transform: translateY(-1px);
+}
+
+.settings-icon {
+  font-size: 1.1rem;
+}
+
+.settings-text {
+  font-weight: 500;
+}
+
