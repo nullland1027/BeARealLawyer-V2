@@ -1,4 +1,4 @@
-export namespace main {
+export namespace models {
 	
 	export class FileLink {
 	    path: string;
@@ -24,13 +24,13 @@ export namespace main {
 	    client: string;
 	    opponent: string;
 	    lawyer: string;
-	    stage: string;
 	    status: string;
-	    sort_order: number;
+	    stage: string;
 	    notes: string;
 	    files: FileLink[];
-	    created_at: string;
-	    updated_at: string;
+	    // Go type: time
+	    created_at: any;
+	    sort_order: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new Project(source);
@@ -43,13 +43,12 @@ export namespace main {
 	        this.client = source["client"];
 	        this.opponent = source["opponent"];
 	        this.lawyer = source["lawyer"];
-	        this.stage = source["stage"];
 	        this.status = source["status"];
-	        this.sort_order = source["sort_order"];
+	        this.stage = source["stage"];
 	        this.notes = source["notes"];
 	        this.files = this.convertValues(source["files"], FileLink);
-	        this.created_at = source["created_at"];
-	        this.updated_at = source["updated_at"];
+	        this.created_at = this.convertValues(source["created_at"], null);
+	        this.sort_order = source["sort_order"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

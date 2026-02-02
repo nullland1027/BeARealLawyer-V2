@@ -2,192 +2,79 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"os"
-	"os/exec"
-	"path/filepath"
-	stdruntime "runtime"
 
-	"github.com/google/uuid"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"be-a-real-lawyer-v2/internal/handlers"
+	"be-a-real-lawyer-v2/internal/models"
+	"be-a-real-lawyer-v2/internal/repository"
 )
 
-// App struct
+// App struct - main application structure that binds to frontend
 type App struct {
-	ctx  context.Context
-	repo *Repository
+	ctx            context.Context
+	projectHandler *handlers.ProjectHandler
+	fileHandler    *handlers.FileHandler
 }
 
 // NewApp creates a new App application struct
 func NewApp() *App {
+	repo := repository.NewProjectRepository()
 	return &App{
-		repo: NewRepository(),
+		projectHandler: handlers.NewProjectHandler(repo),
+		fileHandler:    handlers.NewFileHandler(),
 	}
 }
 
-// startup is called when the app starts. The context is saved
-// so we can call the runtime methods
+// startup is called when the app starts
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	a.fileHandler.SetContext(ctx)
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+// --- Project Methods (exposed to frontend) ---
+
+// GetProjects returns all projects
+func (a *App) GetProjects() []models.Project {
+	return a.projectHandler.GetProjects()
 }
 
-func (a *App) SelectFiles() []FileLink {
-	selection, err := runtime.OpenMultipleFilesDialog(a.ctx, runtime.OpenDialogOptions{
-		Title: "选择引用文件",
-	})
-
-	if err != nil || len(selection) == 0 {
-		return []FileLink{}
-	}
-
-	var links []FileLink
-	for _, path := range selection {
-		links = append(links, FileLink{
-			Path:      path,
-			Name:      filepath.Base(path),
-			Extension: filepath.Ext(path),
-			IsFolder:  false,
-		})
-	}
-	return links
+// SaveProject creates or updates a project
+func (a *App) SaveProject(p models.Project) models.Project {
+	return a.projectHandler.SaveProject(p)
 }
 
-func (a *App) SelectFolder() []FileLink {
-	selection, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
-		Title: "选择引用文件夹",
-	})
-
-	if err != nil || selection == "" {
-		return []FileLink{}
-	}
-
-	return []FileLink{{
-		Path:      selection,
-		Name:      filepath.Base(selection),
-		Extension: "",
-		IsFolder:  true,
-	}}
-}
-
-func (a *App) OpenFile(path string) error {
-	// Check if file/folder exists first
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return fmt.Errorf("文件或文件夹不存在: %s", filepath.Base(path))
-	}
-
-	var cmd *exec.Cmd
-
-	switch stdruntime.GOOS {
-	case "windows":
-		cmd = exec.Command("cmd", "/c", "start", "", path)
-	case "darwin":
-		cmd = exec.Command("open", path)
-	default: // linux
-		cmd = exec.Command("xdg-open", path)
-	}
-	
-	return cmd.Start()
-}
-
-func (a *App) GetProjects() []Project {
-	projects, err := a.repo.Load()
-	if err != nil {
-		fmt.Printf("Error loading projects: %v\n", err)
-		return []Project{}
-	}
-	return projects
-}
-
-func (a *App) SaveProject(p Project) Project {
-	p.EnsureDefaults()
-	if p.ID == "" {
-		p.ID = uuid.New().String()
-	}
-
-	projects, _ := a.repo.Load()
-	
-	// Check if update or create
-	found := false
-	for i, existing := range projects {
-		if existing.ID == p.ID {
-			projects[i] = p
-			found = true
-			break
-		}
-	}
-	if !found {
-		projects = append([]Project{p}, projects...)
-	}
-
-	a.repo.Save(projects)
-	return p
-}
-
+// DeleteProject removes a project by ID
 func (a *App) DeleteProject(id string) bool {
-	projects, _ := a.repo.Load()
-	newProjects := []Project{}
-	for _, p := range projects {
-		if p.ID != id {
-			newProjects = append(newProjects, p)
-		}
-	}
-	
-	if len(newProjects) == len(projects) {
-		return false
-	}
-	
-	a.repo.Save(newProjects)
-	return true
+	return a.projectHandler.DeleteProject(id)
 }
 
+// UpdateProjects updates all projects (for reordering)
+func (a *App) UpdateProjects(projects []models.Project) bool {
+	return a.projectHandler.UpdateProjects(projects)
+}
+
+// DeleteAllProjects removes all projects
 func (a *App) DeleteAllProjects() int {
-	projects, _ := a.repo.Load()
-	count := len(projects)
-	a.repo.Save([]Project{})
-	return count
+	return a.projectHandler.DeleteAllProjects()
 }
 
-func (a *App) UpdateProjects(projects []Project) bool {
+// --- File Methods (exposed to frontend) ---
 
-	err := a.repo.Save(projects)
-
-	return err == nil
-
+// SelectFiles opens a file selection dialog
+func (a *App) SelectFiles() []models.FileLink {
+	return a.fileHandler.SelectFiles()
 }
 
+// SelectFolder opens a folder selection dialog
+func (a *App) SelectFolder() []models.FileLink {
+	return a.fileHandler.SelectFolder()
+}
 
+// OpenFile opens a file or folder with the system default application
+func (a *App) OpenFile(path string) error {
+	return a.fileHandler.OpenFile(path)
+}
 
-func (a *App) CheckPath(path string) FileLink {
-
-
-
-	fmt.Printf("Backend CheckPath called with: %s\n", path)
-
-
-
-	info, err := os.Stat(path)
-
-	if err != nil {
-
-		return FileLink{}
-
-	}
-
-	return FileLink{
-
-		Path:      path,
-
-		Name:      info.Name(),
-
-		Extension: filepath.Ext(path),
-
-		IsFolder:  info.IsDir(),
-
-	}
-
+// CheckPath returns file info for a given path
+func (a *App) CheckPath(path string) models.FileLink {
+	return a.fileHandler.CheckPath(path)
 }

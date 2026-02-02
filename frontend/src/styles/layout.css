@@ -1,0 +1,75 @@
+/* App Layout */
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar-wrapper {
+  flex-shrink: 0;
+  height: 100%;
+  position: relative;
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Resize Handle */
+.resize-handle {
+  width: 6px;
+  cursor: col-resize;
+  background-color: transparent;
+  transition: background-color 0.2s;
+  position: relative;
+  z-index: 10;
+  margin-left: -3px;
+}
+
+.resize-handle:hover,
+.resize-handle.active {
+  background-color: #007bff;
+}
+
+.collapse-btn {
+  width: 24px;
+  height: 24px;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  color: var(--text-color);
+  font-size: 12px;
+  padding: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 18px;
+}
+
+.collapse-btn:hover {
+  background-color: var(--column-bg);
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.toolbar h3 {
+  margin: 0;
+}
