@@ -10,6 +10,8 @@ export function DeleteProject(arg1:string):Promise<boolean>;
 
 export function GetProjects():Promise<Array<models.Project>>;
 
+export function ImportProjectsFromFile():Promise<number>;
+
 export function OpenFile(arg1:string):Promise<void>;
 
 export function SaveProject(arg1:models.Project):Promise<models.Project>;

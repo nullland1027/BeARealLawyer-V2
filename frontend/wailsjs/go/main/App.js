@@ -18,6 +18,10 @@ export function GetProjects() {
   return window['go']['main']['App']['GetProjects']();
 }
 
+export function ImportProjectsFromFile() {
+  return window['go']['main']['App']['ImportProjectsFromFile']();
+}
+
 export function OpenFile(arg1) {
   return window['go']['main']['App']['OpenFile'](arg1);
 }

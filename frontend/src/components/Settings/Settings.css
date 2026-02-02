@@ -116,3 +116,50 @@
   opacity: 0.6;
   font-size: 0.8rem !important;
 }
+
+/* Data Actions */
+.data-actions {
+  padding: 16px;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.import-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.import-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.import-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.import-icon {
+  font-size: 1.1rem;
+}
+
+.data-hint {
+  margin: 12px 0 0 0;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  text-align: center;
+}
+

@@ -70,7 +70,50 @@ func (h *ProjectHandler) DeleteAllProjects() int {
 	return count
 }
 
+// ImportProjects imports projects from a list, merging with existing data
+func (h *ProjectHandler) ImportProjects(newProjects []models.Project) (int, error) {
+	existingProjects, err := h.repo.Load()
+	if err != nil {
+		return 0, fmt.Errorf("failed to load existing projects: %w", err)
+	}
+
+	// Create a map of existing IDs for quick lookup
+	existingIDs := make(map[string]bool)
+	for _, p := range existingProjects {
+		existingIDs[p.ID] = true
+	}
+
+	// Add new projects that don't already exist
+	importedCount := 0
+	for _, p := range newProjects {
+		// Skip if already exists
+		if existingIDs[p.ID] {
+			continue
+		}
+
+		// Ensure defaults
+		p.EnsureDefaults()
+		
+		// Add to existing projects
+		existingProjects = append(existingProjects, p)
+		importedCount++
+	}
+
+	// Update sort order
+	for i := range existingProjects {
+		existingProjects[i].SortOrder = i
+	}
+
+	// Save all projects
+	if err := h.repo.Save(existingProjects); err != nil {
+		return 0, fmt.Errorf("failed to save projects: %w", err)
+	}
+
+	return importedCount, nil
+}
+
 // SetContext is a placeholder for wails context (not used here but may be needed)
 func (h *ProjectHandler) SetContext(ctx context.Context) {
 	// Reserved for future use
 }
+

@@ -1,0 +1,212 @@
+[
+  {
+    "id": "52089cdd9ea644e4ade763f79dcb817c",
+    "name": "陈明星 对 李智合同纠纷（债权转让）",
+    "client": "陈明星",
+    "opponent": "李智",
+    "lawyer": "张月梅律师",
+    "stage": "民事一审立案",
+    "completion": 0,
+    "status": "已结案",
+    "notes": "1、起诉状、证据目录（添加送达证据）等待进一步优化",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/【李智】受让债权（张月梅律师）/",
+        "name": "【李智】受让债权（张月梅律师）",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-21T09:19:55",
+    "updated_at": "2026-01-30T10:52:26"
+  },
+  {
+    "id": "2d59178b475c40e1b564fef7aa98313a",
+    "name": "王永发 对 太仓天狮环保滤材有限公司",
+    "client": "王永发",
+    "opponent": "太仓天狮环保滤材有限公司",
+    "lawyer": "徐千惠律师",
+    "stage": "劳动仲裁",
+    "completion": 0,
+    "status": "正在处理",
+    "notes": "需要下周一交付",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/【王永发】劳动仲裁（徐千惠律师）/",
+        "name": "【王永发】劳动仲裁（徐千惠律师）",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-30T10:51:31",
+    "updated_at": "2026-01-30T10:52:46"
+  },
+  {
+    "id": "eae3c4e9118f4a34baf91781987ae1f3",
+    "name": "周其建 对 上海唤裕信息科技有限公司",
+    "client": "周其建",
+    "opponent": "上海唤裕信息科技有限公司",
+    "lawyer": "张雯文",
+    "stage": "执行",
+    "completion": 0,
+    "status": "等待接手",
+    "notes": "强制执行申请（下周三前完成）",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/【周其建】强制执行申请（张雯文律师）/",
+        "name": "【周其建】强制执行申请（张雯文律师）",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-29T16:00:38",
+    "updated_at": "2026-01-29T16:01:21"
+  },
+  {
+    "id": "a3d4fd05ae3244b9a41c94fe3ee67757",
+    "name": "牛苗苗 对 张宇",
+    "client": "牛苗苗",
+    "opponent": "张宇",
+    "lawyer": "韩镓潞",
+    "stage": "强制执行申请",
+    "completion": 0,
+    "status": "正在处理",
+    "notes": "1、需要找韩律师拿卷宗档案\n2、做强制执行申请配套文件",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/【牛苗苗】强制执行申请（韩镓潞）/",
+        "name": "【牛苗苗】强制执行申请（韩镓潞）",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-28T10:02:54",
+    "updated_at": "2026-01-29T14:54:01"
+  },
+  {
+    "id": "ba8ac6530f0545c3bbdb726bbe03a99b",
+    "name": "刘继泉 对 陈博林非机动车交通事故责任纠纷",
+    "client": "刘继泉",
+    "opponent": "陈博林",
+    "lawyer": "徐千惠律师",
+    "stage": "民事一审立案",
+    "completion": 0,
+    "status": "已结案",
+    "notes": "1、起诉状、医疗费用表（1.20交给徐千惠律师），等待审核\n2、等待制作证据目录\n3、关注鉴定后续（伤残鉴定、三期鉴定）",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/【刘继泉】交通事故责任/",
+        "name": "【刘继泉】交通事故责任",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-21T09:15:28",
+    "updated_at": "2026-01-29T13:42:39"
+  },
+  {
+    "id": "2376aa999b434b0fa1d768444954ccb1",
+    "name": "无锡市锡兴轴承有限公司 对 朱剑波、黄大伍、重庆尚上服饰有限公司民间借贷纠纷",
+    "client": "无锡市锡兴轴承有限公司",
+    "opponent": "朱剑波、黄大伍、重庆尚上服饰有限公司",
+    "lawyer": "张月梅律师",
+    "stage": "做委托材料",
+    "completion": 0,
+    "status": "等待接手",
+    "notes": "",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/【锡兴轴承】民间借贷纠纷（张月梅）/",
+        "name": "【锡兴轴承】民间借贷纠纷（张月梅）",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-21T14:14:44",
+    "updated_at": "2026-01-21T14:16:03"
+  },
+  {
+    "id": "aa77103890b74072a94efd428ce520d6",
+    "name": "陆翔 对 宋毅、苏州月光房地产开发有限公司",
+    "client": "陆翔",
+    "opponent": "宋毅、苏州月光房地产开发有限公司",
+    "lawyer": "张月梅律师",
+    "stage": "民事一审立案",
+    "completion": 0,
+    "status": "正在处理",
+    "notes": "1、需要完成债权转让的寄送（苏州月光房地产开发有限公司，地址：苏州市吴中区胥口镇旅游专线公路602号\n2、确认",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/【陆翔】债权转让（张月梅）/",
+        "name": "【陆翔】债权转让（张月梅）",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-21T10:38:08",
+    "updated_at": "2026-01-21T10:49:16"
+  },
+  {
+    "id": "a46dccd578c24f17941ca63c6c08fba5",
+    "name": "赵守利 对 黄光祥合同纠纷",
+    "client": "赵守利",
+    "opponent": "黄光祥",
+    "lawyer": "胥翔律师",
+    "stage": "民事一审立案",
+    "completion": 0,
+    "status": "正在处理",
+    "notes": "1、起诉状、证据目录已基本完成\n2、等待客户在群内重新发微信聊天记录图片，以整理证据",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/【赵守利、黄光祥】案件起诉状（胥翔）/",
+        "name": "【赵守利、黄光祥】案件起诉状（胥翔）",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-21T09:58:07",
+    "updated_at": "2026-01-21T10:00:29"
+  },
+  {
+    "id": "fd66a6f3432a4cd98ff06994761e9c2d",
+    "name": "太仓新世源塑胶模具有限公司 对 昆山嘉联易工业设备有限公司买卖合同纠纷",
+    "client": "太仓新世源塑胶模具有限公司",
+    "opponent": "昆山嘉联易工业设备有限公司",
+    "lawyer": "张月梅律师",
+    "stage": "调解结案（等待归档）",
+    "completion": 0,
+    "status": "等待接手",
+    "notes": "1、等律师费到账后可进行归档",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/（已完成）太仓新世源塑胶模具有限公司（民事立案材料）/",
+        "name": "（已完成）太仓新世源塑胶模具有限公司（民事立案材料）",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-21T09:55:26",
+    "updated_at": "2026-01-21T09:57:12"
+  },
+  {
+    "id": "68497a5e24b34c14ab30a211102b3c64",
+    "name": "邓志超 对 北京凯斯克家具有限公司劳动争议纠纷",
+    "client": "邓志超",
+    "opponent": "北京凯斯克家具有限公司",
+    "lawyer": "范蒙蒙律师",
+    "stage": "劳动仲裁立案",
+    "completion": 0,
+    "status": "已结案",
+    "notes": "立案环节已结束\n帮忙制作了劳动仲裁申请书和证据目录",
+    "files": [
+      {
+        "path": "/Users/asl/Desktop/润钧和律师事务所实习/日常工作/【邓志超】劳动仲裁（范蒙蒙）/",
+        "name": "【邓志超】劳动仲裁（范蒙蒙）",
+        "extension": "",
+        "is_folder": true
+      }
+    ],
+    "created_at": "2026-01-21T09:49:54",
+    "updated_at": "2026-01-21T09:53:53"
+  }
+]

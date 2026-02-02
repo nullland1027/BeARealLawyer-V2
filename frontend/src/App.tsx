@@ -297,6 +297,8 @@ function App() {
                 onClose={() => setIsSettingsOpen(false)}
                 theme={theme}
                 onThemeChange={setTheme}
+                onImportComplete={() => loadProjects()}
+                showToast={showToast}
             />
 
             <Toast 

@@ -22,8 +22,7 @@ export function Sidebar({ projects, isDragOver, onOpenSettings }: SidebarProps) 
     return (
         <div className="sidebar">
             <div className="sidebar-header">
-                <h2>律师案件管理</h2>
-                <div className="sidebar-version">Version 2.0 (Go+React)</div>
+                <h2>韩律师案件管理</h2>
             </div>
             
             <div className="metrics-panel">

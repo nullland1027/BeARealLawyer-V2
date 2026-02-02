@@ -18,6 +18,18 @@ export namespace models {
 	        this.is_folder = source["is_folder"];
 	    }
 	}
+	export class FlexTime {
+	
+	
+	    static createFrom(source: any = {}) {
+	        return new FlexTime(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	
+	    }
+	}
 	export class Project {
 	    id: string;
 	    name: string;
@@ -28,8 +40,7 @@ export namespace models {
 	    stage: string;
 	    notes: string;
 	    files: FileLink[];
-	    // Go type: time
-	    created_at: any;
+	    created_at: FlexTime;
 	    sort_order: number;
 	
 	    static createFrom(source: any = {}) {
@@ -47,7 +58,7 @@ export namespace models {
 	        this.stage = source["stage"];
 	        this.notes = source["notes"];
 	        this.files = this.convertValues(source["files"], FileLink);
-	        this.created_at = this.convertValues(source["created_at"], null);
+	        this.created_at = this.convertValues(source["created_at"], FlexTime);
 	        this.sort_order = source["sort_order"];
 	    }
 	
